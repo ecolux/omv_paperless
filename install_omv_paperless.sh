@@ -25,11 +25,19 @@ if [ ! -f "$TEMPLATE_PATH" ]; then
     echo -e "${YELLOW}Verfügbare Vorlagen:${RESET}"
     pveam available
 
+    # Benutzer zur Bestätigung auffordern
+    read -p "Bitte gib den genauen Namen der Vorlage ein, die du herunterladen möchtest: " TEMPLATE_NAME
+
     # Download der Vorlage
-    if pveam download local "$TEMPLATE"; then
+    if pveam download local "$TEMPLATE_NAME"; then
         echo -e "${GREEN}Vorlage erfolgreich heruntergeladen!${RESET}"
     else
         echo -e "${YELLOW}Fehler beim Herunterladen der Vorlage. Bitte überprüfe deine Internetverbindung oder den Vorlagennamen.${RESET}"
+        echo -e "${YELLOW}Bitte führe die folgenden Schritte aus, um das Problem zu beheben:${RESET}"
+        echo -e "1. Überprüfe die Internetverbindung mit dem Befehl: ${CYAN}ping -c 4 google.com${RESET}"
+        echo -e "2. Stelle sicher, dass du die genaue Vorlage aus der Liste der verfügbaren Vorlagen verwendest."
+        echo -e "3. Führe den Befehl zum Herunterladen der Vorlage manuell aus, z.B.:"
+        echo -e "${CYAN}pveam download local <genauer_vorlagenname>${RESET}"
         exit 1
     fi
 else
