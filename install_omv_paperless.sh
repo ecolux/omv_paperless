@@ -12,7 +12,7 @@ echo -e "${CYAN} Willkommen zur automatisierten Installation von OMV und Paperle
 echo -e "${CYAN}###############################################${RESET}\n"
 
 # Vorlage für Debian 11
-TEMPLATE="debian-11-standard_11.0-1_amd64.tar.gz"
+TEMPLATE="debian-11-standard_11.1-1_amd64.tar.gz"  # Überprüfen Sie den genauen Namen
 TEMPLATE_PATH="/var/lib/vz/template/cache/$TEMPLATE"
 
 # Überprüfen, ob die Vorlage bereits heruntergeladen wurde
@@ -20,11 +20,12 @@ echo -e "${YELLOW}Überprüfe, ob die Debian-Vorlage vorhanden ist...${RESET}"
 if [ ! -f "$TEMPLATE_PATH" ]; then
     echo -e "${YELLOW}Debian-Vorlage nicht gefunden. Lade die Vorlage herunter...${RESET}"
     pveam update
-    pveam download local $TEMPLATE
-    if [ $? -eq 0 ]; then
+
+    # Überprüfung auf erfolgreiche Vorlage
+    if pveam download local "$TEMPLATE"; then
         echo -e "${GREEN}Vorlage erfolgreich heruntergeladen!${RESET}"
     else
-        echo -e "${YELLOW}Fehler beim Herunterladen der Vorlage. Bitte überprüfe deine Internetverbindung.${RESET}"
+        echo -e "${YELLOW}Fehler beim Herunterladen der Vorlage. Bitte überprüfe deine Internetverbindung oder den Vorlagennamen.${RESET}"
         exit 1
     fi
 else
@@ -80,7 +81,8 @@ else
     exit 1
 fi
 
-# Weiter mit den Installationsschritten für OMV und Paperless NGX...
+# Füge hier die Installationsschritte für OMV und Paperless NGX hinzu
+# Beispiel: pct exec 100 apt update && pct exec 100 apt install openmediavault -y
 
 # Skriptende
 echo -e "${GREEN}Installation abgeschlossen! Die Container laufen nun.${RESET}"
