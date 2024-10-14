@@ -21,7 +21,11 @@ if [ ! -f "$TEMPLATE_PATH" ]; then
     echo -e "${YELLOW}Debian-Vorlage nicht gefunden. Lade die Vorlage herunter...${RESET}"
     pveam update
 
-    # Überprüfung auf erfolgreiche Vorlage
+    # Überprüfe die Liste der verfügbaren Vorlagen
+    echo -e "${YELLOW}Verfügbare Vorlagen:${RESET}"
+    pveam available
+
+    # Download der Vorlage
     if pveam download local "$TEMPLATE"; then
         echo -e "${GREEN}Vorlage erfolgreich heruntergeladen!${RESET}"
     else
@@ -36,7 +40,7 @@ fi
 echo -e "${YELLOW}Erstelle den Container für OpenMediaVault (ID: 100)...${RESET}"
 
 if ! pct config 100 &>/dev/null; then
-    pct create 100 local:vztmpl/$TEMPLATE --rootfs local-lvm:8 --memory 1024 --swap 512 --hostname omv-container --net0 name=eth0,bridge=vmbr0,ip=dhcp --cores 2 --ostype debian --arch amd64 --unprivileged 1
+    pct create 100 local:vztmpl/$TEMPLATE --rootfs local-lvm:8 --memory 2048 --swap 512 --hostname omv-container --net0 name=eth0,bridge=vmbr0,ip=dhcp --cores 2 --ostype debian --arch amd64 --unprivileged 1
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}OpenMediaVault-Container erfolgreich erstellt!${RESET}"
     else
@@ -51,7 +55,7 @@ fi
 echo -e "${YELLOW}Erstelle den Container für Paperless NGX (ID: 101)...${RESET}"
 
 if ! pct config 101 &>/dev/null; then
-    pct create 101 local:vztmpl/$TEMPLATE --rootfs local-lvm:8 --memory 1024 --swap 512 --hostname paperless-container --net0 name=eth0,bridge=vmbr0,ip=dhcp --cores 2 --ostype debian --arch amd64 --unprivileged 1
+    pct create 101 local:vztmpl/$TEMPLATE --rootfs local-lvm:8 --memory 2048 --swap 512 --hostname paperless-container --net0 name=eth0,bridge=vmbr0,ip=dhcp --cores 2 --ostype debian --arch amd64 --unprivileged 1
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}Paperless NGX-Container erfolgreich erstellt!${RESET}"
     else
@@ -81,7 +85,7 @@ else
     exit 1
 fi
 
-# Füge hier die Installationsschritte für OMV und Paperless NGX hinzu
+# Hier können zusätzliche Installationsschritte für OMV und Paperless NGX hinzugefügt werden.
 # Beispiel: pct exec 100 apt update && pct exec 100 apt install openmediavault -y
 
 # Skriptende
